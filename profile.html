@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile Card Generator</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 40px;
+      margin: 0;
+      padding: 40px;
+      background: linear-gradient(135deg, #d4fc79, #96e6a1);
+    }
+
+    .form-box {
+      width: 320px;
+      background: white;
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+      transition: transform 0.3s;
+    }
+
+    .form-box:hover {
+      transform: translateY(-5px);
+    }
+
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+
+    label {
+      font-weight: bold;
+      color: #444;
+    }
+
+    input[type="text"], textarea, input[type="color"] {
+      width: 100%;
+      padding: 8px;
+      margin-top: 6px;
+      margin-bottom: 12px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      outline: none;
+      transition: 0.3s;
+      font-size: 14px;
+    }
+
+    input[type="text"]:focus, textarea:focus {
+      border-color: #66bb6a;
+      box-shadow: 0 0 6px rgba(102,187,106,0.4);
+    }
+
+    input[type="color"] {
+      width: 100%;
+      height: 40px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background: #66bb6a;
+      border: none;
+      color: white;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #57a65a;
+    }
+
+    .preview {
+      margin-top: 20px;
+      padding: 10px;
+      border-radius: 10px;
+      background: #f9f9f9;
+      border: 1px solid #eee;
+    }
+
+    .card-container {
+      width: 320px;
+      display: none;
+      text-align: center;
+    }
+
+    .card {
+      margin-top: 15px;
+      padding: 20px;
+      border: 3px solid #ccc;
+      border-radius: 15px;
+      background: white;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+      transition: 0.3s ease;
+    }
+
+    .card h3 {
+      margin: 0;
+      color: #333;
+    }
+
+    .like-btn {
+      border: none;
+      padding: 8px 12px;
+      cursor: pointer;
+      border-radius: 20px;
+      margin-top: 10px;
+      background: #f0f0f0;
+      transition: 0.3s;
+    }
+
+    .like-btn:hover {
+      background: #ddd;
+    }
+
+    .liked {
+      background-color: #e53935;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="form-box">
+    <h2>Create Your Profile</h2>
+    <label>Name:</label>
+    <input type="text" id="nameInput">
+
+    <label>Year Level:</label>
+    <input type="text" id="courseInput">
+
+    <label>Bio:</label>
+    <textarea id="bioInput"></textarea>
+
+    <label>Favorite Color:</label>
+    <input type="color" id="colorInput">
+
+    <button id="generateBtn">Generate Profile Card</button>
+
+    <div class="preview">
+      <h3>Real-time Preview</h3>
+      <p><b>Name:</b> <span id="livePreview"></span></p>
+      <p><b>Year Level:</b> <span id="livePreviewCourse"></span></p>
+    </div>
+  </div>
+
+  <div class="card-container" id="cardContainer">
+    <h2 id="cardTitle">Your Profile Card</h2>
+    <div class="card" id="profileCard">
+      <h3 id="displayName"></h3>
+      <p id="displayCourse"></p>
+      <p id="displayBio"></p>
+      <button id="likeBtn" class="like-btn">❤️ Like</button>
+      <span id="likeCount">0</span>
+    </div>
+  </div>
+
+<script>
+  const generateBtn = document.getElementById('generateBtn');
+  const cardContainer = document.getElementById('cardContainer');
+  const profileCard = document.getElementById('profileCard');
+  const displayName = document.getElementById('displayName');
+  const displayCourse = document.getElementById('displayCourse');
+  const displayBio = document.getElementById('displayBio');
+
+  const nameInput = document.getElementById('nameInput');
+  const courseInput = document.getElementById('courseInput');
+  const bioInput = document.getElementById('bioInput');
+  const colorInput = document.getElementById('colorInput');
+  const livePreview = document.getElementById('livePreview');
+  const livePreviewCourse = document.getElementById('livePreviewCourse');
+
+  const likeBtn = document.getElementById('likeBtn');
+  const likeCount = document.getElementById('likeCount');
+  let liked = false;
+
+  nameInput.addEventListener('input', function() {
+    livePreview.textContent = nameInput.value;
+  });
+
+  courseInput.addEventListener('input', function() {
+    livePreviewCourse.textContent = courseInput.value;
+  });
+
+  generateBtn.addEventListener('click', function() {
+    displayName.textContent = nameInput.value;
+    displayCourse.textContent = courseInput.value;
+    displayBio.textContent = bioInput.value;
+
+    cardContainer.style.display = 'block'; 
+    profileCard.style.borderColor = colorInput.value; 
+  });
+
+  likeBtn.addEventListener('click', function() {
+    liked = !liked;
+    likeCount.textContent = liked ? "1 like" : "0 like";
+    likeBtn.classList.toggle('liked', liked);
+  });
+
+  profileCard.addEventListener('mouseover', function() {
+    this.style.transform = 'scale(1.05)';
+    this.style.transition = 'transform 0.3s ease, box-shadow 0.3s ease';
+    this.style.boxShadow = '0 12px 25px rgba(0,0,0,0.2)';
+  });
+
+  profileCard.addEventListener('mouseout', function() {
+    this.style.transform = 'scale(1)';
+    this.style.boxShadow = '0 6px 15px rgba(0,0,0,0.1)';
+  });
+</script>
+
+</body>
+</html>
+
